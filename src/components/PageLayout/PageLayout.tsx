@@ -1,8 +1,8 @@
 import { Layout } from "antd";
 
-import { StyledLogo, StyledFooter } from "./PageLayout.styled";
+import { StyledLogo, StyledFooter, StyledLayout } from "./PageLayout.styled";
 
-const { Header, Content } = Layout;
+const { Content, Header } = Layout;
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   const logoText = "WikipediaMap";
   const footerText = "WikipediaMap ©2018 Created by MS";
   return (
-    <Layout>
+    <StyledLayout>
       <Header>
         <StyledLogo>
           <h2>{logoText}</h2>
@@ -20,7 +20,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
       </Header>
       <Content>{children}</Content>
       <StyledFooter>{footerText}</StyledFooter>
-    </Layout>
+    </StyledLayout>
   );
 };
 

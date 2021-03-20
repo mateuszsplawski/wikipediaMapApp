@@ -12,8 +12,9 @@ export const StyledLogo = styled.div`
 
 export const StyledFooter = styled(Footer)`
   text-align: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  position: relative;
+`;
+
+export const StyledLayout = styled(Layout)`
+  height: 100vh;
 `;
