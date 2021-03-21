@@ -24,4 +24,4 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default PageLayout;

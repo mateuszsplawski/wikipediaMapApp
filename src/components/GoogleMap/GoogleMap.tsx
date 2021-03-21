@@ -16,3 +16,5 @@ export const GoogleMap: React.FC = () => {
     ></GoogleMapReact>
   );
 };
+
+export default GoogleMap;

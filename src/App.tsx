@@ -1,11 +1,6 @@
 import "./App.css";
-import { GoogleMap } from "./components/GoogleMap/GoogleMap";
-import { PageLayout } from "./components/PageLayout/PageLayout";
+import MainPage from "page/MainPage/MainPage";
 
 export default function App() {
-  return (
-    <PageLayout>
-      <GoogleMap />
-    </PageLayout>
-  );
+  return <MainPage />;
 }
