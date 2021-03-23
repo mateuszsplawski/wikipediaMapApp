@@ -1,17 +1,21 @@
 import { useEffect } from "react";
 import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 
+import MapMarker from "components/MapMarker/MapMarker";
 import { emit } from "pages/MainPage/mediator";
+import useMapStore from "pages/MainPage/state";
 
 const poznanCoords = { lat: 52.32737567310198, lng: 16.882423352150823 };
 const googleApiKey = String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-const defaultZoom = 10;
+const defaultZoom = 13;
 
 export const GoogleMap: React.FC = () => {
+  const [{ articles }] = useMapStore();
+
   const handleChange = (e: ChangeEventValue) => {
-    const { center } = e;
-    center !== poznanCoords && emit("mapDragged", center);
+    emit("mapDragged", e.center);
   };
+
   useEffect(() => {
     emit("mapLoaded", poznanCoords);
   }, []);
@@ -25,7 +29,11 @@ export const GoogleMap: React.FC = () => {
       defaultZoom={defaultZoom}
       yesIWantToUseGoogleMapApiInternals
       onChange={handleChange}
-    ></GoogleMapReact>
+    >
+      {articles.map(({ lat, lng, pageid }) => (
+        <MapMarker lat={lat} lng={lng} key={pageid} pageid={pageid} />
+      ))}
+    </GoogleMapReact>
   );
 };
 

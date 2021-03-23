@@ -6,7 +6,7 @@ interface wikiQueryParameters {
   limit?: number;
 }
 
-interface wikiGetResponse {
+export interface wikiGetResponse {
   batchcomplete: "";
   query: {
     geosearch: {

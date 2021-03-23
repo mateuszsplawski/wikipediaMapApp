@@ -1,3 +1,5 @@
+import { wikiGetResponse } from "services/api/wikipedia";
+import useMapStore from "pages/MainPage/state";
 import { Coords } from "google-map-react";
 
 import wikiApiClient from "services/api/wikipedia";
@@ -13,16 +15,26 @@ const listeners: Listeners = {
 const attachListener = (eventName: Event, listener: Function) =>
   (listeners[eventName] = listener);
 
+const mapWikiApiResponse = (response: wikiGetResponse) => {
+  return response.query.geosearch.map(({ lat, lon, pageid }) => ({
+    lat,
+    pageid,
+    lng: lon,
+  }));
+};
+
 const useMediator = () => {
+  const [, { addMarkers }] = useMapStore();
+
   const handleMapDragging = async (coord: Coords) => {
     const articles = await wikiApiClient.getArticles({ coord });
-    console.log("mapDragged", ...articles.query.geosearch);
+    addMarkers(mapWikiApiResponse(articles));
   };
   attachListener("mapDragged", handleMapDragging);
 
   const handleMapLoad = async (coord: Coords) => {
     const articles = await wikiApiClient.getArticles({ coord });
-    console.log("mapLoaded", ...articles.query.geosearch);
+    addMarkers(mapWikiApiResponse(articles));
   };
   attachListener("mapLoaded", handleMapLoad);
 };
