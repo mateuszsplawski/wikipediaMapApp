@@ -1,4 +1,4 @@
-import { StyledMapMarker } from "./MapMarket.styled";
+import { StyledMapMarker } from "./MapMarker.styled";
 
 interface MapMarkerProps {
   lat: number;
