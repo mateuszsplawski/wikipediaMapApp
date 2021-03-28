@@ -9,4 +9,10 @@ export const StyledMapMarker = styled.button`
   border-radius: 50%;
   opacity: 70%;
   cursor: pointer;
+  transition: opacity 0.5s;
+  will-change: opacity;
+
+  &:hover {
+    opacity: unset;
+  }
 `;

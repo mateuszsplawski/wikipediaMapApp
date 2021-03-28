@@ -28,8 +28,14 @@ export const GoogleMap: React.FC = () => {
       }
       onChange={handleChange}
     >
-      {articles.map(({ lat, lng, pageid }) => (
-        <MapMarker lat={lat} lng={lng} key={pageid} pageid={pageid} />
+      {articles.map(({ lat, lng, pageid, title }) => (
+        <MapMarker
+          lat={lat}
+          lng={lng}
+          key={pageid}
+          pageid={pageid}
+          title={title}
+        />
       ))}
     </GoogleMapReact>
   );

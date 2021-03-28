@@ -17,10 +17,11 @@ const attachListener = (eventName: Event, listener: Function) =>
   (listeners[eventName] = listener);
 
 const mapWikiApiResponse = (response: wikiGetResponse) => {
-  return response.query.geosearch.map(({ lat, lon, pageid }) => ({
+  return response.query.geosearch.map(({ lat, lon, pageid, title }) => ({
     lat,
     pageid,
     lng: lon,
+    title,
   }));
 };
 

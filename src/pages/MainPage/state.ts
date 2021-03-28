@@ -7,6 +7,7 @@ defaults.mutator = (currentState, producer) => produce(currentState, producer);
 type Articles = {
   lat: number;
   pageid: number;
+  title: string;
   lng: number;
 };
 type State = { articles: Articles[]; isGoogleApiLoaded: boolean };
