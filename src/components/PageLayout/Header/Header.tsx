@@ -4,16 +4,15 @@ import { useEffect } from "react";
 import useMapStore from "pages/MainPage/state";
 import { StyledHeader, StyledLogo } from "./Header.styled";
 import { emit } from "pages/MainPage/mediator";
-
-const logoText = "WikipediaMap";
-const inputId = "searchBar";
+import content from "constant/content.json";
 
 export const Header: React.FC = () => {
   const [{ isGoogleApiLoaded }] = useMapStore();
+  const inputId = "searchBar";
 
   useEffect(() => {
     if (isGoogleApiLoaded) {
-      const input = document.getElementById("searchBar") as HTMLInputElement;
+      const input = document.getElementById(inputId) as HTMLInputElement;
       const searchBox = new (window as any).google.maps.places.SearchBox(input);
       searchBox.addListener("places_changed", () => {
         const selectedItem = searchBox.getPlaces();
@@ -25,10 +24,10 @@ export const Header: React.FC = () => {
   return (
     <StyledHeader>
       <StyledLogo>
-        <h2>{logoText}</h2>
+        <h2>{content.header.logo}</h2>
       </StyledLogo>
       <label htmlFor={inputId}>
-        <Input id={inputId} />
+        <Input id={inputId} placeholder={content.header.placeholder} />
       </label>
     </StyledHeader>
   );

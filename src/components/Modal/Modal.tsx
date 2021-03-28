@@ -3,9 +3,8 @@ import { Modal as AntModal, Typography } from "antd";
 import useMapStore from "pages/MainPage/state";
 import { StyledIframe } from "./Modal.styled";
 
-const modalSize = { width: "85vw", height: "85vh" };
-
 export const Modal: React.FC = () => {
+  const modalSize = { width: "85vw", height: "85vh" };
   const [
     {
       modal: {

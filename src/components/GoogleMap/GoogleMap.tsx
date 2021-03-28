@@ -4,10 +4,7 @@ import MapMarker from "components/MapMarker";
 import { emit } from "pages/MainPage/mediator";
 import useMapStore from "pages/MainPage/state";
 import theme from "theme";
-
-const poznanCoords = { lat: 52.32737567310198, lng: 16.882423352150823 };
-const googleApiKey = String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-const defaultZoom = 13;
+import { defaultMapCoords, defaultMapZoom, googleApiKey } from "constant";
 
 export const GoogleMap: React.FC = () => {
   const [{ articles }] = useMapStore();
@@ -21,8 +18,8 @@ export const GoogleMap: React.FC = () => {
         key: googleApiKey,
         libraries: ["places"],
       }}
-      defaultCenter={poznanCoords}
-      defaultZoom={defaultZoom}
+      defaultCenter={defaultMapCoords}
+      defaultZoom={defaultMapZoom}
       yesIWantToUseGoogleMapApiInternals
       onGoogleApiLoaded={({ map: googleMapInstance }) =>
         emit("mapLoaded", googleMapInstance)
