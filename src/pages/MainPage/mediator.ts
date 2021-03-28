@@ -4,12 +4,13 @@ import { Coords } from "google-map-react";
 
 import wikiApiClient from "services/api/wikipedia";
 
-type Event = "mapDragged" | "mapLoaded";
+type Event = "mapDragged" | "mapLoaded" | "searchBarItemSelected";
 type Listeners = Record<Event, Function>;
 
 const listeners: Listeners = {
   mapDragged: () => null,
   mapLoaded: () => null,
+  searchBarItemSelected: () => null,
 };
 
 const attachListener = (eventName: Event, listener: Function) =>
@@ -23,8 +24,10 @@ const mapWikiApiResponse = (response: wikiGetResponse) => {
   }));
 };
 
+let map: any;
+
 const useMediator = () => {
-  const [, { addMarkers }] = useMapStore();
+  const [, { addMarkers, setGoogleApiLoadedStatus }] = useMapStore();
 
   const handleMapDragging = async (coord: Coords) => {
     const articles = await wikiApiClient.getArticles({ coord });
@@ -32,12 +35,17 @@ const useMediator = () => {
   };
   attachListener("mapDragged", handleMapDragging);
 
-  const handleMapLoad = async (coord: Coords) => {
-    const articles = await wikiApiClient.getArticles({ coord });
-    addMarkers(mapWikiApiResponse(articles));
+  const handleMapLoad = (googleMapInstance: any) => {
+    setGoogleApiLoadedStatus(true);
+    map = googleMapInstance;
   };
   attachListener("mapLoaded", handleMapLoad);
 };
+
+const handleSearchBarItemSelect = (selectedItemCoords: Coords) => {
+  map.setCenter(selectedItemCoords);
+};
+attachListener("searchBarItemSelected", handleSearchBarItemSelect);
 
 export const emit = (eventName: Event, ...args: any[]) => {
   const listener = listeners[eventName];

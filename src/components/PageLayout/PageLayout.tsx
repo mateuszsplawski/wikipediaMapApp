@@ -1,23 +1,20 @@
 import { Layout } from "antd";
 
-import { StyledLogo, StyledFooter, StyledLayout } from "./PageLayout.styled";
+import Header from "./Header";
+import { StyledFooter, StyledLayout } from "./PageLayout.styled";
 
-const { Content, Header } = Layout;
+const { Content } = Layout;
 
 interface PageLayoutProps {
   children: React.ReactNode;
 }
-const logoText = "WikipediaMap";
+
 const footerText = "WikipediaMap ©2018 Created by MS";
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
     <StyledLayout>
-      <Header>
-        <StyledLogo>
-          <h2>{logoText}</h2>
-        </StyledLogo>
-      </Header>
+      <Header />
       <Content>{children}</Content>
       <StyledFooter>{footerText}</StyledFooter>
     </StyledLayout>

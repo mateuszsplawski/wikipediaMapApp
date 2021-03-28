@@ -9,7 +9,7 @@ type Articles = {
   pageid: number;
   lng: number;
 };
-type State = { articles: Articles[] };
+type State = { articles: Articles[]; isGoogleApiLoaded: boolean };
 type Actions = typeof actions;
 
 declare module "react-sweet-state" {
@@ -19,6 +19,7 @@ declare module "react-sweet-state" {
 }
 
 const initialState: State = {
+  isGoogleApiLoaded: false,
   articles: [],
 };
 
@@ -35,6 +36,13 @@ const actions = {
 
     setState((draft) => {
       draft.articles = [...currentArticles, ...filteredPayload];
+    });
+  },
+  setGoogleApiLoadedStatus: (isGoogleApiLoaded: boolean): Action<State> => ({
+    setState,
+  }) => {
+    setState((draft) => {
+      draft.isGoogleApiLoaded = isGoogleApiLoaded;
     });
   },
 };

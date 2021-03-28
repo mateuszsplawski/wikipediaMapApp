@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 
 import MapMarker from "components/MapMarker/MapMarker";
@@ -15,10 +14,6 @@ export const GoogleMap: React.FC = () => {
   const handleChange = (e: ChangeEventValue) => {
     emit("mapDragged", e.center);
   };
-
-  useEffect(() => {
-    emit("mapLoaded", poznanCoords);
-  }, []);
   return (
     <GoogleMapReact
       bootstrapURLKeys={{
@@ -28,6 +23,9 @@ export const GoogleMap: React.FC = () => {
       defaultCenter={poznanCoords}
       defaultZoom={defaultZoom}
       yesIWantToUseGoogleMapApiInternals
+      onGoogleApiLoaded={({ map: googleMapInstance }) =>
+        emit("mapLoaded", googleMapInstance)
+      }
       onChange={handleChange}
     >
       {articles.map(({ lat, lng, pageid }) => (
