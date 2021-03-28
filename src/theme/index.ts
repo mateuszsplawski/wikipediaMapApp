@@ -1,4 +1,10 @@
 const theme = {
+  colors: {
+    mainMarkerBg: "#237bffe0",
+    mainMarkerShadow: "#698bff",
+    viewedMarkerBg: "#fa8c16",
+    viewedMarkerShadow: "#ffa769",
+  },
   googleMaps: {
     default: [
       {
