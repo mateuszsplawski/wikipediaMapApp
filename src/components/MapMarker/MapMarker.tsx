@@ -25,5 +25,3 @@ export const MapMarker: React.FC<MapMarkerProps> = ({
     </Tooltip>
   );
 };
-
-export default MapMarker;

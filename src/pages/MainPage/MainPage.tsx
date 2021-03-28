@@ -1,5 +1,5 @@
-import GoogleMap from "components/GoogleMap/GoogleMap";
-import PageLayout from "components/PageLayout/PageLayout";
+import GoogleMap from "components/GoogleMap";
+import PageLayout from "components/PageLayout";
 import Mediator from "./mediator";
 
 export const MainPage: React.FC = () => {
@@ -10,5 +10,3 @@ export const MainPage: React.FC = () => {
     </PageLayout>
   );
 };
-
-export default MainPage;

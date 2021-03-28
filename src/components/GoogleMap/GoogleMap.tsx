@@ -1,6 +1,6 @@
 import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 
-import MapMarker from "components/MapMarker/MapMarker";
+import MapMarker from "components/MapMarker";
 import { emit } from "pages/MainPage/mediator";
 import useMapStore from "pages/MainPage/state";
 import theme from "theme";
@@ -45,5 +45,3 @@ export const GoogleMap: React.FC = () => {
     </GoogleMapReact>
   );
 };
-
-export default GoogleMap;
