@@ -1,5 +1,6 @@
 import { Tooltip } from "antd";
 
+import { emit } from "pages/MainPage/mediator";
 import { StyledMapMarker } from "./MapMarker.styled";
 
 interface MapMarkerProps {
@@ -9,10 +10,10 @@ interface MapMarkerProps {
   title: string;
 }
 
-export const MapMarker: React.FC<MapMarkerProps> = ({ title }) => {
+export const MapMarker: React.FC<MapMarkerProps> = ({ title, pageid }) => {
   return (
     <Tooltip title={title}>
-      <StyledMapMarker />
+      <StyledMapMarker onClick={() => emit("markerClicked", pageid)} />
     </Tooltip>
   );
 };

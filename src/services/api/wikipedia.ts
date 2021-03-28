@@ -6,7 +6,7 @@ interface wikiQueryParameters {
   limit?: number;
 }
 
-export interface wikiGetResponse {
+export interface wikiArticlesGetResponse {
   batchcomplete: "";
   query: {
     geosearch: {
@@ -21,8 +21,30 @@ export interface wikiGetResponse {
   };
 }
 
+interface wikiArticleGetResponse {
+  query: {
+    pages: {
+      pageid: {
+        canonicalurl: string;
+        contentmodel: string;
+        editurl: string;
+        fullurl: string;
+        lastrevid: number;
+        length: number;
+        ns: number;
+        pageid: number;
+        pagelanguage: string;
+        pagelanguagedir: string;
+        pagelanguagehtmlcode: string;
+        title: string;
+        touched: string;
+      };
+    };
+  };
+}
+
 const client = ky.create({
-  prefixUrl: "https://en.wikipedia.org/w/",
+  prefixUrl: "https://pl.wikipedia.org/w/",
 });
 
 const wikiApiClient = {
@@ -30,7 +52,7 @@ const wikiApiClient = {
     coord,
     radius = 10000,
     limit = 10,
-  }: wikiQueryParameters): Promise<wikiGetResponse> {
+  }: wikiQueryParameters): Promise<wikiArticlesGetResponse> {
     const params = {
       action: "query",
       list: "geosearch",
@@ -44,6 +66,23 @@ const wikiApiClient = {
           gscoord: coord.lat + "|" + coord.lng,
           gsradius: radius,
           gslimit: limit,
+        },
+      })
+      .json();
+  },
+  getArticle({ pageid }: { pageid: number }): Promise<wikiArticleGetResponse> {
+    const params = {
+      action: "query",
+      format: "json",
+      pageids: pageid,
+      inprop: "url",
+      origin: "*",
+      prop: "info",
+    };
+    return client
+      .get(`api.php?`, {
+        searchParams: {
+          ...params,
         },
       })
       .json();

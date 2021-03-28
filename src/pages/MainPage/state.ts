@@ -10,7 +10,11 @@ type Articles = {
   title: string;
   lng: number;
 };
-type State = { articles: Articles[]; isGoogleApiLoaded: boolean };
+type State = {
+  articles: Articles[];
+  isGoogleApiLoaded: boolean;
+  modal: { isVisible: boolean; data: { title?: string; url?: string } };
+};
 type Actions = typeof actions;
 
 declare module "react-sweet-state" {
@@ -22,6 +26,7 @@ declare module "react-sweet-state" {
 const initialState: State = {
   isGoogleApiLoaded: false,
   articles: [],
+  modal: { isVisible: false, data: {} },
 };
 
 const actions = {
@@ -39,11 +44,24 @@ const actions = {
       draft.articles = [...currentArticles, ...filteredPayload];
     });
   },
-  setGoogleApiLoadedStatus: (isGoogleApiLoaded: boolean): Action<State> => ({
-    setState,
-  }) => {
+  setGoogleApiLoadedStatus: ({
+    isGoogleApiLoaded,
+  }: {
+    isGoogleApiLoaded: boolean;
+  }): Action<State> => ({ setState }) => {
     setState((draft) => {
       draft.isGoogleApiLoaded = isGoogleApiLoaded;
+    });
+  },
+  setModalStatus: ({
+    isVisible,
+    modalData,
+  }: {
+    isVisible: boolean;
+    modalData?: { title: string; url: string };
+  }): Action<State> => ({ setState }) => {
+    setState((draft) => {
+      draft.modal = { isVisible: isVisible, data: modalData ? modalData : {} };
     });
   },
 };
