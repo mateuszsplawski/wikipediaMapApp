@@ -1,7 +1,7 @@
 const key = "articlesArr";
 
 const localStorageDB = () => {
-  let articles = getArticles();
+  let articles: string[] = getArticles();
 
   function getArticles() {
     try {

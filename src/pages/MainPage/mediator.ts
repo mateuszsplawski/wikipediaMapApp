@@ -1,8 +1,7 @@
-import { Articles } from "./state";
-import { wikiArticlesGetResponse } from "services/api/wikipedia";
-import useMapStore from "pages/MainPage/state";
 import { Coords } from "google-map-react";
 
+import { Articles, wikiArticlesGetResponse } from "types/index";
+import useMapStore from "pages/MainPage/state";
 import wikiApiClient from "services/api/wikipedia";
 import localStorageDB from "services/localStorageDB";
 

@@ -1,21 +1,19 @@
 import { createStore, createHook, defaults, Action } from "react-sweet-state";
 import { produce } from "immer";
 
+import { Articles, Modal } from "types/index";
+
+// React-sweet-state config
 defaults.devtools = true;
 defaults.mutator = (currentState, producer) => produce(currentState, producer);
 
-export type Articles = {
-  lat: number;
-  pageid: number;
-  title: string;
-  lng: number;
-  isViewed: boolean;
-};
 type State = {
   articles: Articles[];
   isGoogleApiLoaded: boolean;
-  modal: { isVisible: boolean; data: { title?: string; url?: string } };
+  modal: Modal;
 };
+
+// React-sweet-state necesarry types
 type Actions = typeof actions;
 
 declare module "react-sweet-state" {
