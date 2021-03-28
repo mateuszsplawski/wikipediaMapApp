@@ -1,19 +1,15 @@
 import { Coords } from "google-map-react";
+import { debounce } from "lodash";
 
 import { Articles, wikiArticlesGetResponse } from "types/index";
 import useMapStore from "pages/MainPage/state";
 import wikiApiClient from "services/api/wikipedia";
 import localStorageDB from "services/localStorageDB";
 
-type Event =
-  | "mapDragged"
-  | "mapLoaded"
-  | "searchBarItemSelected"
-  | "markerClicked";
+type Event = "mapLoaded" | "searchBarItemSelected" | "markerClicked";
 type Listeners = Record<Event, Function>;
 
 const listeners: Listeners = {
-  mapDragged: () => null,
   mapLoaded: () => null,
   searchBarItemSelected: () => null,
   markerClicked: () => null,
@@ -38,6 +34,16 @@ const mapReadArticles = (articles: Articles[]) =>
     isViewed: localStorageDB.isArticleRead(article.title),
   }));
 
+const debounceFunction = ({
+  fn,
+  debounceTime,
+}: {
+  fn: () => void;
+  debounceTime: number;
+}) => {
+  return debounce(fn, debounceTime);
+};
+
 let map: any;
 
 const useMediator = () => {
@@ -46,8 +52,9 @@ const useMediator = () => {
     { addMarkers, setGoogleApiLoadedStatus, setModalStatus, setMarkerStatus },
   ] = useMapStore();
 
-  const handleMapDragging = async (coord: Coords) => {
-    const response = await wikiApiClient.getArticles({ coord });
+  const handleMapCenterChange = async () => {
+    const coord = map.center.toJSON();
+    const response = await wikiApiClient.getArticles({ coord, limit: 50 });
     const articles = mapWikiApiResponse(response);
     addMarkers(mapReadArticles(articles));
   };
@@ -55,6 +62,10 @@ const useMediator = () => {
   const handleMapLoad = (googleMapInstance: any) => {
     setGoogleApiLoadedStatus({ isGoogleApiLoaded: true });
     map = googleMapInstance;
+    map.addListener(
+      "idle",
+      debounceFunction({ fn: handleMapCenterChange, debounceTime: 750 })
+    );
   };
 
   const handleSearchBarItemSelect = (selectedItemCoords: Coords) => {
@@ -78,7 +89,6 @@ const useMediator = () => {
 
   attachListener("markerClicked", handleMarkerClick);
   attachListener("mapLoaded", handleMapLoad);
-  attachListener("mapDragged", handleMapDragging);
   attachListener("searchBarItemSelected", handleSearchBarItemSelect);
 };
 

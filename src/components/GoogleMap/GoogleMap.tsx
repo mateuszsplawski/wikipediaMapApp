@@ -1,4 +1,4 @@
-import GoogleMapReact, { ChangeEventValue } from "google-map-react";
+import GoogleMapReact from "google-map-react";
 
 import MapMarker from "components/MapMarker";
 import { emit } from "pages/MainPage/mediator";
@@ -9,9 +9,6 @@ import { defaultMapCoords, defaultMapZoom, googleApiKey } from "constant";
 export const GoogleMap: React.FC = () => {
   const [{ articles }] = useMapStore();
 
-  const handleChange = (e: ChangeEventValue) => {
-    emit("mapDragged", e.center);
-  };
   return (
     <GoogleMapReact
       bootstrapURLKeys={{
@@ -24,7 +21,6 @@ export const GoogleMap: React.FC = () => {
       onGoogleApiLoaded={({ map: googleMapInstance }) =>
         emit("mapLoaded", googleMapInstance)
       }
-      onChange={handleChange}
       options={{
         styles: theme.googleMaps.default,
       }}
