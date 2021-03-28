@@ -32,13 +32,14 @@ export const GoogleMap: React.FC = () => {
         styles: theme.googleMaps.default,
       }}
     >
-      {articles.map(({ lat, lng, pageid, title }) => (
+      {articles.map(({ lat, lng, pageid, title, isViewed }) => (
         <MapMarker
           lat={lat}
           lng={lng}
           key={pageid}
           pageid={pageid}
           title={title}
+          isViewed={isViewed}
         />
       ))}
     </GoogleMapReact>

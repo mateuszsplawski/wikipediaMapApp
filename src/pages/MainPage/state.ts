@@ -4,11 +4,12 @@ import { produce } from "immer";
 defaults.devtools = true;
 defaults.mutator = (currentState, producer) => produce(currentState, producer);
 
-type Articles = {
+export type Articles = {
   lat: number;
   pageid: number;
   title: string;
   lng: number;
+  isViewed: boolean;
 };
 type State = {
   articles: Articles[];
@@ -62,6 +63,26 @@ const actions = {
   }): Action<State> => ({ setState }) => {
     setState((draft) => {
       draft.modal = { isVisible: isVisible, data: modalData ? modalData : {} };
+    });
+  },
+  setMarkerStatus: ({
+    isViewed,
+    title,
+  }: {
+    isViewed: boolean;
+    title: string;
+  }): Action<State> => ({ setState, getState }) => {
+    const currentArticles = getState().articles;
+    const currentArticlesPageTitles = currentArticles.map(({ title }) => title);
+    const articleIndex = currentArticlesPageTitles.findIndex(
+      (articleTitle) => articleTitle === title
+    );
+
+    setState((draft) => {
+      draft.articles[articleIndex] = {
+        ...currentArticles[articleIndex],
+        isViewed: isViewed,
+      };
     });
   },
 };

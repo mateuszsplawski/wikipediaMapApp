@@ -1,8 +1,10 @@
+import { Articles } from "./state";
 import { wikiArticlesGetResponse } from "services/api/wikipedia";
 import useMapStore from "pages/MainPage/state";
 import { Coords } from "google-map-react";
 
 import wikiApiClient from "services/api/wikipedia";
+import localStorageDB from "services/localStorageDB";
 
 type Event =
   | "mapDragged"
@@ -27,20 +29,28 @@ const mapWikiApiResponse = (response: wikiArticlesGetResponse) => {
     pageid,
     lng: lon,
     title,
+    isViewed: false,
   }));
 };
+
+const mapReadArticles = (articles: Articles[]) =>
+  articles.map((article) => ({
+    ...article,
+    isViewed: localStorageDB.isArticleRead(article.title),
+  }));
 
 let map: any;
 
 const useMediator = () => {
   const [
     ,
-    { addMarkers, setGoogleApiLoadedStatus, setModalStatus },
+    { addMarkers, setGoogleApiLoadedStatus, setModalStatus, setMarkerStatus },
   ] = useMapStore();
 
   const handleMapDragging = async (coord: Coords) => {
-    const articles = await wikiApiClient.getArticles({ coord });
-    addMarkers(mapWikiApiResponse(articles));
+    const response = await wikiApiClient.getArticles({ coord });
+    const articles = mapWikiApiResponse(response);
+    addMarkers(mapReadArticles(articles));
   };
 
   const handleMapLoad = (googleMapInstance: any) => {
@@ -63,6 +73,8 @@ const useMediator = () => {
       isVisible: true,
       modalData: { title: articleTitle, url: articleUrl },
     });
+    localStorageDB.setArticleAsRead(articleTitle);
+    setMarkerStatus({ title: articleTitle, isViewed: true });
   };
 
   attachListener("markerClicked", handleMarkerClick);

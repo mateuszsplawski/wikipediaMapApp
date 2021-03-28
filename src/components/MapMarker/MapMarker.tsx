@@ -8,12 +8,20 @@ interface MapMarkerProps {
   lng: number;
   pageid: number;
   title: string;
+  isViewed: boolean;
 }
 
-export const MapMarker: React.FC<MapMarkerProps> = ({ title, pageid }) => {
+export const MapMarker: React.FC<MapMarkerProps> = ({
+  title,
+  pageid,
+  isViewed,
+}) => {
   return (
     <Tooltip title={title}>
-      <StyledMapMarker onClick={() => emit("markerClicked", pageid)} />
+      <StyledMapMarker
+        isViewed={isViewed}
+        onClick={() => emit("markerClicked", pageid)}
+      />
     </Tooltip>
   );
 };
