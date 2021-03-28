@@ -3,6 +3,7 @@ import GoogleMapReact, { ChangeEventValue } from "google-map-react";
 import MapMarker from "components/MapMarker/MapMarker";
 import { emit } from "pages/MainPage/mediator";
 import useMapStore from "pages/MainPage/state";
+import theme from "theme";
 
 const poznanCoords = { lat: 52.32737567310198, lng: 16.882423352150823 };
 const googleApiKey = String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
@@ -27,6 +28,9 @@ export const GoogleMap: React.FC = () => {
         emit("mapLoaded", googleMapInstance)
       }
       onChange={handleChange}
+      options={{
+        styles: theme.googleMaps.default,
+      }}
     >
       {articles.map(({ lat, lng, pageid, title }) => (
         <MapMarker
