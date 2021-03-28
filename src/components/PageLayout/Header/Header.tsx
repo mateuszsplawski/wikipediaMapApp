@@ -1,5 +1,5 @@
 import { Input } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import useMapStore from "pages/MainPage/state";
 import { StyledHeader, StyledLogo } from "./Header.styled";
@@ -10,6 +10,8 @@ export const Header: React.FC = () => {
   const [{ isGoogleApiLoaded }] = useMapStore();
   const inputId = "searchBar";
 
+  const [inputValue, setInputValue] = useState("");
+
   useEffect(() => {
     if (isGoogleApiLoaded) {
       const input = document.getElementById(inputId) as HTMLInputElement;
@@ -17,6 +19,7 @@ export const Header: React.FC = () => {
       searchBox.addListener("places_changed", () => {
         const selectedItem = searchBox.getPlaces();
         const selectedItemCoords = selectedItem[0].geometry.location.toJSON();
+        setInputValue(selectedItem[0].name);
         emit("searchBarItemSelected", selectedItemCoords);
       });
     }
@@ -27,7 +30,12 @@ export const Header: React.FC = () => {
         <h2>{content.header.logo}</h2>
       </StyledLogo>
       <label htmlFor={inputId}>
-        <Input id={inputId} placeholder={content.header.placeholder} />
+        <Input
+          id={inputId}
+          placeholder={content.header.placeholder}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.currentTarget.value)}
+        />
       </label>
     </StyledHeader>
   );
