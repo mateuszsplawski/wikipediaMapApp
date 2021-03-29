@@ -6,13 +6,20 @@ import useMapStore from "pages/MainPage/state";
 import wikiApiClient from "services/api/wikipedia";
 import localStorageDB from "services/localStorageDB";
 
-type Event = "mapLoaded" | "searchBarItemSelected" | "markerClicked";
+type Event =
+  | "mapLoaded"
+  | "searchBarItemSelected"
+  | "markerClicked"
+  | "drawerButtonClicked"
+  | "viewedArticleButtonClicked";
 type Listeners = Record<Event, Function>;
 
 const listeners: Listeners = {
   mapLoaded: () => null,
   searchBarItemSelected: () => null,
   markerClicked: () => null,
+  drawerButtonClicked: () => null,
+  viewedArticleButtonClicked: () => null,
 };
 
 const attachListener = (eventName: Event, listener: Function) =>
@@ -31,7 +38,9 @@ const mapWikiApiResponse = (response: wikiArticlesGetResponse) => {
 const mapReadArticles = (articles: Articles[]) =>
   articles.map((article) => ({
     ...article,
-    isViewed: localStorageDB.isArticleRead(article.title),
+    isViewed: localStorageDB.isArticleRead({
+      title: article.title,
+    }),
   }));
 
 const debounceFunction = ({
@@ -49,13 +58,20 @@ let map: any;
 const useMediator = () => {
   const [
     ,
-    { addMarkers, setGoogleApiLoadedStatus, setModalStatus, setMarkerStatus },
+    {
+      addMarkers,
+      setGoogleApiLoadedStatus,
+      setModalStatus,
+      setMarkerStatus,
+      setDrawerStatus,
+    },
   ] = useMapStore();
 
   const handleMapCenterChange = async () => {
-    const coord = map.center.toJSON();
-    const response = await wikiApiClient.getArticles({ coord, limit: 50 });
+    const coords = map.center.toJSON();
+    const response = await wikiApiClient.getArticles({ coords, limit: 50 });
     const articles = mapWikiApiResponse(response);
+
     addMarkers(mapReadArticles(articles));
   };
 
@@ -72,24 +88,44 @@ const useMediator = () => {
     map.setCenter(selectedItemCoords);
   };
 
-  const handleMarkerClick = async (pageid: number) => {
+  const handleMarkerClick = async ({
+    pageid,
+    coords,
+  }: {
+    pageid: number;
+    coords: Coords;
+  }) => {
     const article = await wikiApiClient.getArticle({ pageid });
     const articleUrl = Object.values(article.query.pages)[0].fullurl.replace(
       ".wikipedia.org",
       ".m.wikipedia.org"
     );
-    const articleTitle = Object.values(article.query.pages)[0].title;
+    const title = Object.values(article.query.pages)[0].title;
+
     setModalStatus({
       isVisible: true,
-      modalData: { title: articleTitle, url: articleUrl },
+      modalData: { title, url: articleUrl },
     });
-    localStorageDB.setArticleAsRead(articleTitle);
-    setMarkerStatus({ title: articleTitle, isViewed: true });
+    setMarkerStatus({ title, isViewed: true });
+
+    localStorageDB.setArticleAsRead({ title, coords });
   };
 
+  const handleDrawerButtonClick = () => {
+    const readArticles = localStorageDB.getReadArticles();
+    setDrawerStatus({ isVisible: true, data: readArticles });
+  };
+
+  const handleViewedArticleButtonClick = ({ coords }: { coords: Coords }) => {
+    map.setCenter(coords);
+    setDrawerStatus({ isVisible: false, data: [] });
+  };
+
+  attachListener("drawerButtonClicked", handleDrawerButtonClick);
   attachListener("markerClicked", handleMarkerClick);
   attachListener("mapLoaded", handleMapLoad);
   attachListener("searchBarItemSelected", handleSearchBarItemSelect);
+  attachListener("viewedArticleButtonClicked", handleViewedArticleButtonClick);
 };
 
 export const emit = (eventName: Event, ...args: any[]) => {

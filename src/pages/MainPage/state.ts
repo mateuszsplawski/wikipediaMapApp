@@ -1,3 +1,4 @@
+import { ReadArticle } from "./../../types/index";
 import { createStore, createHook, defaults, Action } from "react-sweet-state";
 import { produce } from "immer";
 
@@ -11,6 +12,7 @@ type State = {
   articles: Articles[];
   isGoogleApiLoaded: boolean;
   modal: Modal;
+  drawer: { isVisible: boolean; data: ReadArticle[] | [] };
 };
 
 // React-sweet-state necesarry types
@@ -26,6 +28,7 @@ const initialState: State = {
   isGoogleApiLoaded: false,
   articles: [],
   modal: { isVisible: false, data: {} },
+  drawer: { isVisible: false, data: [] },
 };
 
 const actions = {
@@ -75,12 +78,22 @@ const actions = {
     const articleIndex = currentArticlesPageTitles.findIndex(
       (articleTitle) => articleTitle === title
     );
-
     setState((draft) => {
       draft.articles[articleIndex] = {
         ...currentArticles[articleIndex],
         isViewed: isViewed,
       };
+    });
+  },
+  setDrawerStatus: ({
+    isVisible,
+    data,
+  }: {
+    isVisible: boolean;
+    data: ReadArticle[] | [];
+  }): Action<State> => ({ setState }) => {
+    setState((draft) => {
+      draft.drawer = { isVisible, data };
     });
   },
 };

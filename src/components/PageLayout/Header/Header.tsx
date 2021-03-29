@@ -1,10 +1,12 @@
-import { Input } from "antd";
+import { Input, Button, Space, Badge } from "antd";
+import { BookOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 
 import useMapStore from "pages/MainPage/state";
 import { StyledHeader, StyledLogo } from "./Header.styled";
 import { emit } from "pages/MainPage/mediator";
 import content from "constant/content.json";
+import localStorageDB from "services/localStorageDB";
 
 export const Header: React.FC = () => {
   const [{ isGoogleApiLoaded }] = useMapStore();
@@ -29,14 +31,26 @@ export const Header: React.FC = () => {
       <StyledLogo>
         <h2>{content.header.logo}</h2>
       </StyledLogo>
-      <label htmlFor={inputId}>
-        <Input
-          id={inputId}
-          placeholder={content.header.placeholder}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.currentTarget.value)}
-        />
-      </label>
+      <Space size="large">
+        <label htmlFor={inputId}>
+          <Input
+            id={inputId}
+            placeholder={content.header.placeholder}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.currentTarget.value)}
+          />
+        </label>
+        <div>
+          <Badge count={localStorageDB.getReadArticlesCount()}>
+            <Button
+              icon={<BookOutlined />}
+              onClick={() => emit("drawerButtonClicked")}
+            >
+              Viewed articles
+            </Button>
+          </Badge>
+        </div>
+      </Space>
     </StyledHeader>
   );
 };

@@ -1,5 +1,6 @@
+import { Coords } from "google-map-react";
 export interface wikiArticlesQueryParameters {
-  coord: { lat: number; lng: number };
+  coords: Coords;
   radius?: number;
   limit?: number;
 }
@@ -53,3 +54,5 @@ export type Modal = {
   isVisible: boolean;
   data: { title?: string; url?: string };
 };
+
+export type ReadArticle = { title: string; coords: Coords };

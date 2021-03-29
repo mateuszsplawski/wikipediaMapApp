@@ -1,7 +1,9 @@
+import { ReadArticle } from "types/index";
+
 const key = "articlesArr";
 
 const localStorageDB = () => {
-  let articles: string[] = getArticles();
+  let articles: ReadArticle[] = getArticles();
 
   function getArticles() {
     try {
@@ -12,10 +14,11 @@ const localStorageDB = () => {
     }
   }
 
-  function addArticle(title: string) {
+  function addArticle({ title, coords }: ReadArticle) {
     try {
-      if (!articles.includes(title)) {
-        articles.push(title);
+      if (!articles.map(({ title }) => title).includes(title)) {
+        articles = getArticles();
+        articles.push({ title, coords });
         localStorage.setItem(key, JSON.stringify(articles));
       }
     } catch (e) {
@@ -27,11 +30,17 @@ const localStorageDB = () => {
     refresh() {
       articles = getArticles();
     },
-    isArticleRead(title: string) {
-      return articles.includes(title);
+    isArticleRead({ title }: { title: string }) {
+      return articles.map(({ title }) => title).includes(title);
     },
-    setArticleAsRead(title: string) {
-      addArticle(title);
+    setArticleAsRead({ title, coords }: ReadArticle) {
+      addArticle({ title, coords });
+    },
+    getReadArticles() {
+      return articles;
+    },
+    getReadArticlesCount() {
+      return articles.length;
     },
   };
   return api;

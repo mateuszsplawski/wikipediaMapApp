@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.6.2",
     "@types/antd": "^1.0.0",
     "@types/google-map-react": "^2.1.0",
     "@types/jest": "^26.0.15",

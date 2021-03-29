@@ -12,7 +12,7 @@ const client = ky.create({
 
 const wikiApiClient = {
   getArticles({
-    coord,
+    coords,
     radius = 10000,
     limit = 10,
   }: wikiArticlesQueryParameters): Promise<wikiArticlesGetResponse> {
@@ -26,7 +26,7 @@ const wikiApiClient = {
       .get(`api.php?`, {
         searchParams: {
           ...params,
-          gscoord: coord.lat + "|" + coord.lng,
+          gscoord: coords.lat + "|" + coords.lng,
           gsradius: radius,
           gslimit: limit,
         },

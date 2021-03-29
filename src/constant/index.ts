@@ -1,4 +1,4 @@
-export const defaultMapZoom = 12;
+export const defaultMapZoom = 13;
 export const defaultMapCoords = {
   lat: 52.32737567310198,
   lng: 16.882423352150823,
