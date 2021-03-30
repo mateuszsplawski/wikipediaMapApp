@@ -7,6 +7,7 @@ import { StyledHeader, StyledLogo } from "./Header.styled";
 import { emit } from "pages/MainPage/mediator";
 import content from "constant/content.json";
 import localStorageDB from "services/localStorageDB";
+import RedirectButton from "components/RedirectButton";
 
 export const Header: React.FC = () => {
   const [{ isGoogleApiLoaded }] = useMapStore();
@@ -40,7 +41,7 @@ export const Header: React.FC = () => {
             onChange={(e) => setInputValue(e.currentTarget.value)}
           />
         </label>
-        <div>
+        <Space size="large">
           <Badge count={localStorageDB.getReadArticlesCount()}>
             <Button
               icon={<BookOutlined />}
@@ -49,7 +50,8 @@ export const Header: React.FC = () => {
               Viewed articles
             </Button>
           </Badge>
-        </div>
+          <RedirectButton />
+        </Space>
       </Space>
     </StyledHeader>
   );

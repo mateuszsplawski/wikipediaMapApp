@@ -1,3 +1,4 @@
+import geolocationAPI from "services/geolocation";
 import { Coords } from "google-map-react";
 import { debounce } from "lodash";
 
@@ -10,16 +11,16 @@ type Event =
   | "mapLoaded"
   | "searchBarItemSelected"
   | "markerClicked"
-  | "drawerButtonClicked"
-  | "viewedArticleButtonClicked";
+  | "redirectButtonClicked"
+  | "drawerButtonClicked";
 type Listeners = Record<Event, Function>;
 
 const listeners: Listeners = {
   mapLoaded: () => null,
   searchBarItemSelected: () => null,
   markerClicked: () => null,
+  redirectButtonClicked: () => null,
   drawerButtonClicked: () => null,
-  viewedArticleButtonClicked: () => null,
 };
 
 const attachListener = (eventName: Event, listener: Function) =>
@@ -64,6 +65,8 @@ const useMediator = () => {
       setModalStatus,
       setMarkerStatus,
       setDrawerStatus,
+      saveCurrentLocation,
+      displayRedirectNotification,
     },
   ] = useMapStore();
 
@@ -111,21 +114,47 @@ const useMediator = () => {
     localStorageDB.setArticleAsRead({ title, coords });
   };
 
-  const handleDrawerButtonClick = () => {
+  const handleRedirectButtonClick = ({
+    inDrawer,
+    coords,
+  }: {
+    inDrawer: boolean;
+    coords: {} | Coords;
+  }) => {
+    if (inDrawer) {
+      map.setCenter(coords);
+      setDrawerStatus({ isVisible: false, data: [] });
+    } else {
+      const getUserCoords = async () => {
+        displayRedirectNotification({ stage: "fetching" });
+        try {
+          const response = (await geolocationAPI.getCurrentCoords()) as any;
+          const coords = {
+            lat: response.coords.latitude,
+            lng: response.coords.longitude,
+          };
+          map.setCenter(coords);
+          saveCurrentLocation({ coords });
+          displayRedirectNotification({ stage: "success" });
+        } catch (err) {
+          console.error(err.message);
+          displayRedirectNotification({ stage: "error" });
+        }
+      };
+      getUserCoords();
+    }
+  };
+
+  const handleViewedArticleButtonClick = () => {
     const readArticles = localStorageDB.getReadArticles();
     setDrawerStatus({ isVisible: true, data: readArticles });
   };
 
-  const handleViewedArticleButtonClick = ({ coords }: { coords: Coords }) => {
-    map.setCenter(coords);
-    setDrawerStatus({ isVisible: false, data: [] });
-  };
-
-  attachListener("drawerButtonClicked", handleDrawerButtonClick);
+  attachListener("redirectButtonClicked", handleRedirectButtonClick);
   attachListener("markerClicked", handleMarkerClick);
   attachListener("mapLoaded", handleMapLoad);
   attachListener("searchBarItemSelected", handleSearchBarItemSelect);
-  attachListener("viewedArticleButtonClicked", handleViewedArticleButtonClick);
+  attachListener("drawerButtonClicked", handleViewedArticleButtonClick);
 };
 
 export const emit = (eventName: Event, ...args: any[]) => {

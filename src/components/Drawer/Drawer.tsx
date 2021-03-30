@@ -1,15 +1,7 @@
-import {
-  Button,
-  Divider,
-  List,
-  Row,
-  Typography,
-  Drawer as AntDrawer,
-} from "antd";
-import { AimOutlined } from "@ant-design/icons";
+import { Divider, List, Row, Typography, Drawer as AntDrawer } from "antd";
 
 import useMapStore from "pages/MainPage/state";
-import { emit } from "pages/MainPage/mediator";
+import RedirectButton from "components/RedirectButton";
 
 export const Drawer: React.FC = () => {
   const drawerWidth = "60vw";
@@ -37,11 +29,7 @@ export const Drawer: React.FC = () => {
               justify="space-between"
             >
               <Typography.Text>{title}</Typography.Text>
-              <Button
-                type="primary"
-                icon={<AimOutlined />}
-                onClick={() => emit("viewedArticleButtonClicked", { coords })}
-              ></Button>
+              <RedirectButton inDrawer={true} coords={coords} />
             </Row>
           </List.Item>
         )}

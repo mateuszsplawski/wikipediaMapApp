@@ -1,8 +1,8 @@
-import { ReadArticle } from "./../../types/index";
+import { Coords } from "google-map-react";
 import { createStore, createHook, defaults, Action } from "react-sweet-state";
 import { produce } from "immer";
 
-import { Articles, Modal } from "types/index";
+import { Articles, Modal, ReadArticle } from "types/index";
 
 // React-sweet-state config
 defaults.devtools = true;
@@ -13,6 +13,8 @@ type State = {
   isGoogleApiLoaded: boolean;
   modal: Modal;
   drawer: { isVisible: boolean; data: ReadArticle[] | [] };
+  currentLocation: {} | Coords;
+  redirectNotification: { stage: "fetching" | "success" | "error" | "" };
 };
 
 // React-sweet-state necesarry types
@@ -29,6 +31,8 @@ const initialState: State = {
   articles: [],
   modal: { isVisible: false, data: {} },
   drawer: { isVisible: false, data: [] },
+  currentLocation: {},
+  redirectNotification: { stage: "" },
 };
 
 const actions = {
@@ -94,6 +98,23 @@ const actions = {
   }): Action<State> => ({ setState }) => {
     setState((draft) => {
       draft.drawer = { isVisible, data };
+    });
+  },
+  saveCurrentLocation: ({ coords }: { coords: Coords }): Action<State> => ({
+    setState,
+  }) => {
+    console.log(coords);
+    setState((draft) => {
+      draft.currentLocation = coords;
+    });
+  },
+  displayRedirectNotification: ({
+    stage,
+  }: {
+    stage: "fetching" | "success" | "error" | "";
+  }): Action<State> => ({ setState }) => {
+    setState((draft) => {
+      draft.redirectNotification.stage = stage;
     });
   },
 };
