@@ -1,10 +1,11 @@
-import { Button, notification } from "antd";
+import { Button } from "antd";
 import { AimOutlined } from "@ant-design/icons";
+import { useEffect } from "react";
 import { Coords } from "google-map-react";
 
 import { emit } from "pages/MainPage/mediator";
 import useMapStore from "pages/MainPage/state";
-import { useEffect } from "react";
+import { createRedirectNotification } from "utils";
 
 interface RedirectButtonProps {
   inDrawer?: boolean;
@@ -16,38 +17,27 @@ export const RedirectButton: React.FC<RedirectButtonProps> = ({
   coords,
 }) => {
   const [{ redirectNotification }] = useMapStore();
+
   const handleClick = () => {
     if (inDrawer) {
       emit("redirectButtonClicked", { coords, inDrawer: true });
     } else {
-      notification.info({
-        message: "Redirect to current location",
-        description: "Check your location settings before.",
-        btn: (
-          <Button
-            type="primary"
-            onClick={() => {
-              emit("redirectButtonClicked", { coords: {}, inDrawer: false });
-            }}
-          >
-            Got it, redirect
-          </Button>
-        ),
+      // prettier-ignore
+      createRedirectNotification({
+        stage: "initial",
+        btn: (<Button type="primary" onClick={() => {emit("redirectButtonClicked", { coords: {}, inDrawer: false });}}>Got it, redirect</Button>),
       });
     }
   };
+
   useEffect(() => {
     if (!inDrawer) {
       if (redirectNotification.stage === "fetching") {
-        notification.destroy();
-        notification.info({ message: "Getting your location information" });
+        createRedirectNotification({ stage: "fetching" });
       } else if (redirectNotification.stage === "success") {
-        notification.success({ message: "Redirecting" });
+        createRedirectNotification({ stage: "success" });
       } else if (redirectNotification.stage === "error") {
-        notification.error({
-          message: "Something went wrong",
-          description: "Please, check again your location settings.",
-        });
+        createRedirectNotification({ stage: "error" });
       }
     }
   }, [redirectNotification.stage, inDrawer]);

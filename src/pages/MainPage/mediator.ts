@@ -1,19 +1,11 @@
-import geolocationAPI from "services/geolocation";
 import { Coords } from "google-map-react";
-import { debounce } from "lodash";
 
-import { Articles, wikiArticlesGetResponse } from "types/index";
 import useMapStore from "pages/MainPage/state";
+import geolocationAPI from "services/geolocation";
 import wikiApiClient from "services/api/wikipedia";
 import localStorageDB from "services/localStorageDB";
-
-type Event =
-  | "mapLoaded"
-  | "searchBarItemSelected"
-  | "markerClicked"
-  | "redirectButtonClicked"
-  | "drawerButtonClicked";
-type Listeners = Record<Event, Function>;
+import { mapWikiApiResponse, debounceFunction, mapReadArticles } from "utils";
+import { Listeners, Event } from "types";
 
 const listeners: Listeners = {
   mapLoaded: () => null,
@@ -26,32 +18,9 @@ const listeners: Listeners = {
 const attachListener = (eventName: Event, listener: Function) =>
   (listeners[eventName] = listener);
 
-const mapWikiApiResponse = (response: wikiArticlesGetResponse) => {
-  return response.query.geosearch.map(({ lat, lon, pageid, title }) => ({
-    lat,
-    pageid,
-    lng: lon,
-    title,
-    isViewed: false,
-  }));
-};
-
-const mapReadArticles = (articles: Articles[]) =>
-  articles.map((article) => ({
-    ...article,
-    isViewed: localStorageDB.isArticleRead({
-      title: article.title,
-    }),
-  }));
-
-const debounceFunction = ({
-  fn,
-  debounceTime,
-}: {
-  fn: () => void;
-  debounceTime: number;
-}) => {
-  return debounce(fn, debounceTime);
+export const emit = (eventName: Event, ...args: any[]) => {
+  const listener = listeners[eventName];
+  listener(...args);
 };
 
 let map: any;
@@ -74,7 +43,6 @@ const useMediator = () => {
     const coords = map.center.toJSON();
     const response = await wikiApiClient.getArticles({ coords, limit: 50 });
     const articles = mapWikiApiResponse(response);
-
     addMarkers(mapReadArticles(articles));
   };
 
@@ -85,10 +53,6 @@ const useMediator = () => {
       "idle",
       debounceFunction({ fn: handleMapCenterChange, debounceTime: 750 })
     );
-  };
-
-  const handleSearchBarItemSelect = (selectedItemCoords: Coords) => {
-    map.setCenter(selectedItemCoords);
   };
 
   const handleMarkerClick = async ({
@@ -104,13 +68,11 @@ const useMediator = () => {
       ".m.wikipedia.org"
     );
     const title = Object.values(article.query.pages)[0].title;
-
     setModalStatus({
       isVisible: true,
       modalData: { title, url: articleUrl },
     });
     setMarkerStatus({ title, isViewed: true });
-
     localStorageDB.setArticleAsRead({ title, coords });
   };
 
@@ -145,6 +107,10 @@ const useMediator = () => {
     }
   };
 
+  const handleSearchBarItemSelect = (selectedItemCoords: Coords) => {
+    map.setCenter(selectedItemCoords);
+  };
+
   const handleViewedArticleButtonClick = () => {
     const readArticles = localStorageDB.getReadArticles();
     setDrawerStatus({ isVisible: true, data: readArticles });
@@ -155,11 +121,6 @@ const useMediator = () => {
   attachListener("mapLoaded", handleMapLoad);
   attachListener("searchBarItemSelected", handleSearchBarItemSelect);
   attachListener("drawerButtonClicked", handleViewedArticleButtonClick);
-};
-
-export const emit = (eventName: Event, ...args: any[]) => {
-  const listener = listeners[eventName];
-  listener(...args);
 };
 
 export const Mediator: React.FC = () => {

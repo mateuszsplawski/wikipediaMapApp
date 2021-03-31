@@ -56,3 +56,12 @@ export type Modal = {
 };
 
 export type ReadArticle = { title: string; coords: Coords };
+
+export type Event =
+  | "mapLoaded"
+  | "searchBarItemSelected"
+  | "markerClicked"
+  | "redirectButtonClicked"
+  | "drawerButtonClicked";
+
+export type Listeners = Record<Event, Function>;

@@ -5,18 +5,19 @@ import RedirectButton from "components/RedirectButton";
 
 export const Drawer: React.FC = () => {
   const drawerWidth = "60vw";
+
   const [
     {
       drawer: { isVisible, data },
     },
     { setDrawerStatus },
   ] = useMapStore();
+
+  const handleClose = () => {
+    setDrawerStatus({ isVisible: false, data: [] });
+  };
   return (
-    <AntDrawer
-      width={drawerWidth}
-      visible={isVisible}
-      onClose={() => setDrawerStatus({ isVisible: false, data: [] })}
-    >
+    <AntDrawer width={drawerWidth} visible={isVisible} onClose={handleClose}>
       <Typography.Title level={3}>Viewed articles</Typography.Title>
       <Divider />
       <List

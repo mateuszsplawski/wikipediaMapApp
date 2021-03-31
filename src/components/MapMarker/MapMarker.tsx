@@ -18,12 +18,12 @@ export const MapMarker: React.FC<MapMarkerProps> = ({
   lat,
   lng,
 }) => {
+  const handleClick = () => {
+    emit("markerClicked", { pageid, coords: { lat, lng } });
+  };
   return (
     <Tooltip title={title}>
-      <StyledMapMarker
-        isViewed={isViewed}
-        onClick={() => emit("markerClicked", { pageid, coords: { lat, lng } })}
-      />
+      <StyledMapMarker isViewed={isViewed} onClick={handleClick} />
     </Tooltip>
   );
 };
