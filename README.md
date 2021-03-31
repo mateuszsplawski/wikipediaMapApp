@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Live version
 
-You can check it out live thanks to Netlify's CD/CI -> [click here](https://fervent-kilby-744936.netlify.app.
+You can check it out live thanks to Netlify's CD/CI -> [click here](https://fervent-kilby-744936.netlify.app.)
 
 ### Installing
 
