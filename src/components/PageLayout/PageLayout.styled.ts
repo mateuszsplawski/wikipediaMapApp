@@ -9,5 +9,5 @@ export const StyledFooter = styled(Footer)`
 `;
 
 export const StyledLayout = styled(Layout)`
-  height: 100vh;
+  height: 100%;
 `;

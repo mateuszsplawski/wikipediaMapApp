@@ -4,7 +4,7 @@ import useMapStore from "pages/MainPage/state";
 import { StyledIframe } from "./Modal.styled";
 
 export const Modal: React.FC = () => {
-  const modalSize = { width: "85vw", height: "85vh" };
+  const modalSize = { width: "95vw", height: "80vh" };
 
   const [
     {

@@ -5,6 +5,12 @@ const theme = {
     viewedMarkerBg: "#fa8c16",
     viewedMarkerShadow: "#ffa769",
   },
+  breakpoints: {
+    xl: "@media(max-width:800px)",
+    l: "@media(max-width:630px)",
+    m: "@media(max-width:510px)",
+    s: "@media(max-width:450px)",
+  },
   googleMaps: {
     default: [
       {
