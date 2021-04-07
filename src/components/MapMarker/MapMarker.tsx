@@ -1,3 +1,4 @@
+import { CheckCircleFilled, InfoCircleFilled } from "@ant-design/icons";
 import { Tooltip } from "antd";
 
 import { emit } from "pages/MainPage/mediator";
@@ -23,7 +24,9 @@ export const MapMarker: React.FC<MapMarkerProps> = ({
   };
   return (
     <Tooltip title={title}>
-      <StyledMapMarker isViewed={isViewed} onClick={handleClick} />
+      <StyledMapMarker isViewed={isViewed} onClick={handleClick}>
+        {isViewed ? <CheckCircleFilled /> : <InfoCircleFilled />}
+      </StyledMapMarker>
     </Tooltip>
   );
 };

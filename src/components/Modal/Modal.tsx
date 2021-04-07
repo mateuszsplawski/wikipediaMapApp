@@ -4,7 +4,7 @@ import useMapStore from "pages/MainPage/state";
 import { StyledIframe } from "./Modal.styled";
 
 export const Modal: React.FC = () => {
-  const modalSize = { width: "95vw", height: "80vh" };
+  const modalSize = { width: "90vw", height: "90vh" };
 
   const [
     {
@@ -21,13 +21,14 @@ export const Modal: React.FC = () => {
   };
   return (
     <AntModal
+      centered
       footer={null}
       visible={isVisible}
       onCancel={handleCancel}
       width={modalSize.width}
       bodyStyle={{ height: modalSize.height }}
     >
-      <Typography>{title}</Typography>
+      <Typography.Title>{title}</Typography.Title>
       <StyledIframe title={title} src={url}></StyledIframe>
     </AntModal>
   );

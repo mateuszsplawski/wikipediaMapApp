@@ -44,6 +44,7 @@ export const RedirectButton: React.FC<RedirectButtonProps> = ({
   return (
     <Button
       type="primary"
+      loading={redirectNotification.stage === "fetching"}
       icon={<AimOutlined />}
       onClick={handleClick}
     ></Button>
