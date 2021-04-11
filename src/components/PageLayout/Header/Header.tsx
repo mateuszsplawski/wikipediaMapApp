@@ -1,9 +1,10 @@
-import { Badge, Input } from "antd";
+import { Input } from "antd";
 import { BookOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 
 import useMapStore from "pages/MainPage/state";
 import {
+  StyledBadge,
   StyledButton,
   StyledHeader,
   StyledLabel,
@@ -55,11 +56,11 @@ export const Header: React.FC = () => {
         </StyledLabel>
         <RedirectButton />
       </div>
-      <Badge count={localStorageDB.getReadArticlesCount()}>
+      <StyledBadge count={localStorageDB.getReadArticlesCount()}>
         <StyledButton icon={<BookOutlined />} onClick={handleClick}>
           Viewed articles
         </StyledButton>
-      </Badge>
+      </StyledBadge>
     </StyledHeader>
   );
 };

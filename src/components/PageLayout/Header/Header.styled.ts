@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import { Button } from "antd";
+import { Button, Badge } from "antd";
 import { Header } from "antd/lib/layout/layout";
 
 export const StyledHeader = styled(Header)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: ${({ theme }) => theme.colors.navBg};
 
   div {
     display: flex;
@@ -21,7 +22,6 @@ export const StyledHeader = styled(Header)`
 export const StyledLogo = styled.div`
   h2 {
     color: #fff;
-    font-weight: 300;
   }
 
   ${({ theme }) => theme.breakpoints.m} {
@@ -60,5 +60,11 @@ export const StyledButton = styled(Button)`
     span:last-of-type {
       display: none;
     }
+  }
+`;
+
+export const StyledBadge = styled(Badge)`
+  sup {
+    background: ${({ theme }) => theme.colors.viewedMarkerBg};
   }
 `;

@@ -1,9 +1,10 @@
 const theme = {
   colors: {
-    mainMarkerBg: "#237bffe0",
-    mainMarkerShadow: "#698bff",
-    viewedMarkerBg: "#fa8c16",
-    viewedMarkerShadow: "#ffa769",
+    navBg: "rgb(26, 26, 26)",
+    mainMarkerBg: "#1890ff",
+    mainMarkerShadow: "#1890ff",
+    viewedMarkerBg: "rgb(9, 210, 97)",
+    viewedMarkerShadow: "rgb(9, 210, 97)",
   },
   breakpoints: {
     xl: "@media(max-width:800px)",

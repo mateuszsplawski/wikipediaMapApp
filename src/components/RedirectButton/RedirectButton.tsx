@@ -43,7 +43,7 @@ export const RedirectButton: React.FC<RedirectButtonProps> = ({
   }, [redirectNotification.stage, inDrawer]);
   return (
     <Button
-      type="primary"
+      type={inDrawer ? "primary" : "default"}
       loading={redirectNotification.stage === "fetching"}
       icon={<AimOutlined />}
       onClick={handleClick}
