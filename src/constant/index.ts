@@ -4,3 +4,9 @@ export const defaultMapCoords = {
   lng: 16.882423352150823,
 };
 export const googleApiKey = String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+export const notificationStages = {
+  initial: "initial",
+  fetching: "fetching",
+  success: "success",
+  error: "error",
+};
