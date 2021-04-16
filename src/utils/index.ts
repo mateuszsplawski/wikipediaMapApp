@@ -1,3 +1,4 @@
+import { notificationStages } from "./../constant/index";
 import { debounce } from "lodash";
 import { ReactNode } from "react";
 import { notification } from "antd";
@@ -26,21 +27,23 @@ export const createRedirectNotification = ({
   stage,
   btn,
 }: {
-  stage: "initial" | "fetching" | "success" | "error";
+  stage: string;
   btn?: ReactNode;
 }) => {
-  if (stage === "initial") {
+  const { initial, fetching, success, error } = notificationStages;
+
+  if (stage === initial) {
     notification.info({
       message: "Redirect to current location",
       description: "Check your location settings before.",
       btn,
     });
-  } else if (stage === "fetching") {
+  } else if (stage === fetching) {
     notification.destroy();
     notification.info({ message: "Getting your location information" });
-  } else if (stage === "success") {
+  } else if (stage === success) {
     notification.success({ message: "Redirecting" });
-  } else if (stage === "error") {
+  } else if (stage === error) {
     notification.error({
       message: "Something went wrong",
       description: "Please, check again your location settings.",
