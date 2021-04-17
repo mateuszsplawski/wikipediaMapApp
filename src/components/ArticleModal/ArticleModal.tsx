@@ -1,9 +1,9 @@
 import { Modal as AntModal, Typography } from "antd";
 
 import useMapStore from "pages/MainPage/state";
-import { StyledIframe } from "./Modal.styled";
+import { StyledIframe } from "./ArticleModal.styled";
 
-export const Modal: React.FC = () => {
+export const ArticleModal: React.FC = () => {
   const modalSize = { width: "90vw", height: "90vh" };
 
   const [
