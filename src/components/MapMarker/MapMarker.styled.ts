@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const StyledMapMarker = styled.button<{ isViewed: boolean }>`
+export const StyledMapMarker = styled.button<{
+  isViewed: boolean;
+  viewedMarkerColor?: string;
+  mainMarkerColor?: string;
+}>`
   width: 1.4rem;
   height: 1.4rem;
   border: unset;
@@ -20,8 +24,14 @@ export const StyledMapMarker = styled.button<{ isViewed: boolean }>`
         : theme.colors.mainMarkerShadow};
 
   svg {
-    color: ${({ isViewed, theme }) =>
-      isViewed ? theme.colors.viewedMarkerBg : theme.colors.mainMarkerShadow};
+    color: ${({ isViewed, theme, viewedMarkerColor, mainMarkerColor }) =>
+      isViewed
+        ? viewedMarkerColor
+          ? viewedMarkerColor
+          : theme.colors.viewedMarkerBg
+        : mainMarkerColor
+        ? mainMarkerColor
+        : theme.colors.mainMarkerShadow};
     font-size: 1.6rem;
   }
 

@@ -65,3 +65,9 @@ export type Event =
   | "drawerButtonClicked";
 
 export type Listeners = Record<Event, Function>;
+
+export type Settings = {
+  isSettingsModalVisible?: boolean;
+  mainMarkerColor?: string;
+  viewedMarkerColor?: string;
+};

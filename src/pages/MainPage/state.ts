@@ -1,3 +1,4 @@
+import { Settings } from "./../../types/index";
 import { Coords } from "google-map-react";
 import { createStore, createHook, defaults, Action } from "react-sweet-state";
 import { produce } from "immer";
@@ -15,6 +16,7 @@ type State = {
   drawer: { isVisible: boolean; data: ReadArticle[] | [] };
   currentLocation: {} | Coords;
   redirectNotification: { stage: "fetching" | "success" | "error" | "" };
+  settings: Settings;
 };
 
 // React-sweet-state necesarry types
@@ -29,6 +31,11 @@ declare module "react-sweet-state" {
 const initialState: State = {
   isGoogleApiLoaded: false,
   articles: [],
+  settings: {
+    isSettingsModalVisible: false,
+    mainMarkerColor: "",
+    viewedMarkerColor: "",
+  },
   modal: { isVisible: false, data: {} },
   drawer: { isVisible: false, data: [] },
   currentLocation: {},
@@ -115,6 +122,23 @@ const actions = {
   }): Action<State> => ({ setState }) => {
     setState((draft) => {
       draft.redirectNotification.stage = stage;
+    });
+  },
+  setSettings: ({
+    isSettingsModalVisible = true,
+    mainMarkerColor,
+    viewedMarkerColor,
+  }: Settings): Action<State> => ({ setState }) => {
+    setState((draft) => {
+      draft.settings = {
+        isSettingsModalVisible,
+        mainMarkerColor: mainMarkerColor
+          ? mainMarkerColor
+          : draft.settings.mainMarkerColor,
+        viewedMarkerColor: viewedMarkerColor
+          ? viewedMarkerColor
+          : draft.settings.viewedMarkerColor,
+      };
     });
   },
 };
