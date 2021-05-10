@@ -1,6 +1,6 @@
 # wikipediaMapApp
 
-Browse the history of your neighborhood or visit new sights as you travel with wikipediaMapApp! 
+Browse the history of your neighborhood or visit new sights as you travel with wikipediaMapApp! App was made during the Netguru College Frontend edition.
 
 ## Getting Started
 
